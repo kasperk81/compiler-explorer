@@ -44,6 +44,7 @@ class DotNetCompiler extends BaseCompiler {
     private readonly sdkBaseDir: string;
     private readonly sdkVersion: string;
     private readonly targetFramework: string;
+    private readonly majorVersion: string;
     private readonly buildConfig: string;
     private readonly clrBuildDir: string;
     private readonly langVersion: string;
@@ -59,6 +60,7 @@ class DotNetCompiler extends BaseCompiler {
 
         const parts = this.sdkVersion.split('.');
         this.targetFramework = `net${parts[0]}.${parts[1]}`;
+        this.majorVersion = parts[0];
 
         this.buildConfig = this.compilerProps<string>(`compiler.${this.compiler.id}.buildConfig`);
         this.clrBuildDir = this.compilerProps<string>(`compiler.${this.compiler.id}.clrDir`);
@@ -172,6 +174,8 @@ class DotNetCompiler extends BaseCompiler {
         <configuration>
             <packageSources>
                 <clear />
+                <add key="dotnet${this.majorVersion}" value="https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet${this.majorVersion}/nuget/v3/index.json" />
+                <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
             </packageSources>
         </configuration>
         `;
